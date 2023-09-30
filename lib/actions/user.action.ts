@@ -68,7 +68,7 @@ export async function deleteUser(params: { clerkId: string }) {
     //  "_id"
     // );
 
-    // delte user questions:
+    // delete user questions:
 
     await Question.deleteMany({ author: user._id });
 
