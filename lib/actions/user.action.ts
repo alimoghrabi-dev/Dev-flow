@@ -33,7 +33,11 @@ export async function createUser(userParams: any) {
   }
 }
 
-export async function updateUser(params: any) {
+export async function updateUser(params: {
+  clerkId: string;
+  updateData: any;
+  path: string;
+}) {
   try {
     connectToDatabase();
 
