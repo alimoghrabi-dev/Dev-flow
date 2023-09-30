@@ -64,9 +64,9 @@ export async function deleteUser(params: { clerkId: string }) {
 
     // delete everything that user have ever done (questions,answers ...):
 
-    const userQuestionIds = await Question.find({ author: user._id }).distinct(
-      "_id"
-    );
+    // const userQuestionIds = await Question.find({ author: user._id }).distinct(
+    //  "_id"
+    // );
 
     // delte user questions:
 
