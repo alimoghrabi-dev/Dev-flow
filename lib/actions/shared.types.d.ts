@@ -15,3 +15,10 @@ export interface createQuestionParams {
   author: Schema.Types.ObjectId | IUser;
   path: string;
 }
+
+export interface getAllUsersProps {
+  page?: number;
+  pageSize?: number;
+  filter?: string;
+  searchQuery?: string;
+}

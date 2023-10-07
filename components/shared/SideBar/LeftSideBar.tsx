@@ -5,9 +5,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { SignedOut } from "@clerk/nextjs";
+import { SignedOut, useAuth } from "@clerk/nextjs";
 
 const LeftSideBar = () => {
+  const { userId } = useAuth();
   const pathname = usePathname();
 
   return (
@@ -18,6 +19,14 @@ const LeftSideBar = () => {
             (pathname.includes(link.route) && link.route.length > 1) ||
             pathname === link.route;
 
+          if (link.route === "/profile") {
+            if (userId) {
+              link.route = `${link.route}/${userId}`;
+            } else {
+              return null;
+            }
+          }
+
           return (
             <Link
               key={link.label}
@@ -26,13 +35,15 @@ const LeftSideBar = () => {
                 isActive
                   ? "primary-gradient rounded-lg text-light-900"
                   : "text-dark300_light900"
-              } flex items-center justify-center gap-2 bg-transparent p-4 md:justify-start lg:gap-4`}>
+              } flex items-center justify-center gap-2 bg-transparent p-4 max-lg:py-2 md:justify-start lg:gap-4`}>
               <Image
                 src={link.imgURL}
                 alt={link.label}
                 width={20}
                 height={20}
-                className={`${isActive ? "" : "invert-colors"}`}
+                className={`max-lg:h-10 max-lg:w-10 ${
+                  isActive ? "" : "invert-colors"
+                }`}
               />
               <p
                 className={`max-lg:hidden ${
@@ -52,9 +63,9 @@ const LeftSideBar = () => {
               <Image
                 src="/assets/icons/account.svg"
                 alt="login"
-                width={40}
-                height={40}
-                className="invert-colors lg:hidden"
+                width={20}
+                height={20}
+                className="invert-colors max-lg:h-5 max-lg:w-5 lg:hidden"
               />
               <span className="primary-text-gradient max-lg:hidden">
                 Log In
@@ -67,9 +78,9 @@ const LeftSideBar = () => {
               <Image
                 src="/assets/icons/sign-up.svg"
                 alt="signup"
-                width={40}
-                height={40}
-                className="invert-colors lg:hidden"
+                width={20}
+                height={20}
+                className="invert-colors max-lg:h-5 max-lg:w-5 lg:hidden"
               />
               <span className="max-lg:hidden">Sign Up</span>
             </Button>

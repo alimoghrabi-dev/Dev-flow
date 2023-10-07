@@ -2,9 +2,12 @@ import Link from "next/link";
 import RenderTag from "../SideBar/RenderTag";
 import Metric from "../Metric";
 import { formatLargeNumber, getTimeStamp } from "@/lib/utils";
+import { SignedIn } from "@clerk/nextjs";
+import EditDeleteAction from "../EditDeleteAction";
 
 interface QuestionCardProps {
   _id: string;
+  clerkId?: string | null;
   title: string;
   tags: {
     _id: string;
@@ -15,7 +18,7 @@ interface QuestionCardProps {
     name: string;
     picture: string;
   };
-  upvotes: number;
+  upvotes: string[];
   views: number;
   answers: Array<object>;
   createdAt: Date;
@@ -23,6 +26,7 @@ interface QuestionCardProps {
 
 const QuestionCard = ({
   _id,
+  clerkId,
   title,
   tags,
   author,
@@ -31,6 +35,8 @@ const QuestionCard = ({
   answers,
   createdAt,
 }: QuestionCardProps) => {
+  const showActionButtons = clerkId && clerkId === author.clerkId;
+
   return (
     <div className="card-wrapper rounded-[10px] p-9 sm:p-11">
       <div className="flex flex-col-reverse items-start justify-between gap-5 sm:flex-row">
@@ -45,7 +51,11 @@ const QuestionCard = ({
           </Link>
         </div>
 
-        {/* TODO: if signed in */}
+        <SignedIn>
+          {showActionButtons && (
+            <EditDeleteAction type="Question" itemId={JSON.stringify(_id)} />
+          )}
+        </SignedIn>
       </div>
 
       <div className="mt-3.5 flex flex-wrap gap-2">
@@ -57,7 +67,7 @@ const QuestionCard = ({
       <div className="mt-6 flex w-full flex-col flex-wrap items-center gap-3.5">
         <div className="flex w-full items-center justify-start">
           <Metric
-            imgUrl="/assets/icons/avatar.svg"
+            imgUrl={author.picture}
             alt="user"
             value={author.name}
             title={` - asked ${getTimeStamp(createdAt)}`}
@@ -70,15 +80,15 @@ const QuestionCard = ({
           <Metric
             imgUrl="/assets/icons/like.svg"
             alt="up votes"
-            value={formatLargeNumber(upvotes)}
-            title=" Votes"
+            value={formatLargeNumber(upvotes.length)}
+            title={upvotes.length === 1 ? " Vote" : " Votes"}
             textStyles="small-medium text-dark400_light800"
           />
           <Metric
             imgUrl="/assets/icons/message.svg"
             alt="message"
             value={formatLargeNumber(answers.length)}
-            title=" Answers"
+            title={answers.length === 1 ? " Answer" : " Answers"}
             textStyles="small-medium text-dark400_light800"
           />
           <Metric

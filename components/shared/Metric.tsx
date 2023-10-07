@@ -25,9 +25,11 @@ const Metric = ({
       <Image
         src={imgUrl}
         alt={alt}
-        width={16}
-        height={16}
-        className={`object-cover ${href ? "rounded-full" : ""}`}
+        width={href ? 184 : 16}
+        height={href ? 184 : 16}
+        className={`object-cover ${
+          href ? "mr-1.5 h-[24px] w-[24px] rounded-full" : ""
+        }`}
       />
 
       <p className={`${textStyles} flex items-center gap-1`}>
