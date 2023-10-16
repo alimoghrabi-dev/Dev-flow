@@ -45,7 +45,7 @@ const GlobalResult = () => {
           type,
         });
 
-        setResult(JSON.parse(res));
+        setResult(JSON.parse(res as any));
       } catch (error) {
         console.log(error);
         throw error;
@@ -59,7 +59,7 @@ const GlobalResult = () => {
     }
   }, [global, type]);
 
-  const renderLinks = (type: string, id: string) => {
+  const renderLinks = (type: string, id: number) => {
     switch (type) {
       case "question":
         return `/question/${id}`;
