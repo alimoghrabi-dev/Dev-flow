@@ -68,7 +68,7 @@ const MobileNav = () => {
         className="background-light900_dark200 custom-scrollbar overflow-y-auto border-none">
         <Link href="/" className="flex items-center gap-2.5">
           <Image
-            src="/assets/images/site-logo.svg"
+            src="/assets/images/site-logo.png"
             width={23}
             height={23}
             alt="devflow"

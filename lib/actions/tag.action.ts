@@ -7,43 +7,6 @@ import Tag, { ITag } from "@/database/tag.model";
 import { FilterQuery } from "mongoose";
 import Question from "@/database/question.model";
 
-export async function getTopInteractedTags(params: {
-  userId: string;
-  limit?: number;
-}) {
-  try {
-    connectToDatabase();
-
-    const { userId } = params;
-
-    const user = await User.findById(userId);
-
-    if (!user) throw new Error("User not found.");
-
-    // find interactions for the user and group by tags :
-
-    return [
-      {
-        _id: "1",
-        name: "tag1",
-      },
-      {
-        _id: "2",
-        name: "tag2",
-      },
-      {
-        _id: "3",
-        name: "tag3",
-      },
-    ];
-
-    // interaction ...
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
-}
-
 export async function getAllTags(params: any) {
   try {
     connectToDatabase();

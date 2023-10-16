@@ -14,19 +14,19 @@ const GlobalResult = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState([
     {
-      type: "question",
+      type: "...",
       id: 1,
-      title: "next js q",
+      title: "...",
     },
     {
-      type: "tag",
+      type: "...",
       id: 1,
-      title: "next js t",
+      title: "...",
     },
     {
-      type: "user",
+      type: "...",
       id: 1,
-      title: "ali",
+      title: "...",
     },
   ]);
 

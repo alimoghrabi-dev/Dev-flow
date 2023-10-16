@@ -73,14 +73,14 @@ const Page = async ({ params, searchParams }: URLProps) => {
           imgUrl="/assets/icons/message.svg"
           alt="message"
           value={formatLargeNumber(result.answers.length)}
-          title=" Answers"
+          title={result.answers.length === 1 ? " Answer" : " Answers"}
           textStyles="small-medium text-dark400_light800"
         />
         <Metric
           imgUrl="/assets/icons/eye.svg"
           alt="views"
           value={formatLargeNumber(result.views)}
-          title=" Views"
+          title={result.views === 1 ? " View" : " Views"}
           textStyles="small-medium text-dark400_light800"
         />
       </div>
