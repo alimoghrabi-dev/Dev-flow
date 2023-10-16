@@ -64,7 +64,7 @@ const AnswerCard = ({
             imgUrl="/assets/icons/like.svg"
             alt="like icon"
             value={formatLargeNumber(upvotes)}
-            title=" Votes"
+            title={upvotes === 1 ? " Vote" : " Votes"}
             textStyles="small-medium text-dark400_light800"
           />
         </div>

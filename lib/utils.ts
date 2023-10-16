@@ -1,5 +1,15 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import qs from "query-string";
+import { BADGE_CRITERIA } from "@/constants";
+import { BadgeCounts } from "@/types";
+
+interface paramsBadgeProps {
+  criteria: {
+    type: keyof typeof BADGE_CRITERIA;
+    count: number;
+  }[];
+}
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -64,4 +74,75 @@ export const getJoinedDate = (date: Date): string => {
   const joinedDate = `${month} ${year}`;
 
   return joinedDate;
+};
+
+export const formUrlQuery = ({
+  params,
+  key,
+  value,
+}: {
+  params: string;
+  key: string;
+  value: string | null;
+}) => {
+  const currentUrl = qs.parse(params);
+
+  currentUrl[key] = value;
+
+  return qs.stringifyUrl(
+    {
+      url: window.location.pathname,
+      query: currentUrl,
+    },
+    {
+      skipNull: true,
+    }
+  );
+};
+
+export const removeKeysFromQuery = ({
+  params,
+  keys,
+}: {
+  params: string;
+  keys: string[];
+}) => {
+  const currentUrl = qs.parse(params);
+
+  keys.forEach((element) => {
+    delete currentUrl[element];
+  });
+
+  return qs.stringifyUrl(
+    {
+      url: window.location.pathname,
+      query: currentUrl,
+    },
+    {
+      skipNull: true,
+    }
+  );
+};
+
+export const assignBages = (paramsBadge: paramsBadgeProps) => {
+  const badgeCounts: BadgeCounts = {
+    GOLD: 0,
+    SILVER: 0,
+    BRONZE: 0,
+  };
+
+  const { criteria } = paramsBadge;
+
+  criteria.forEach((badge) => {
+    const { type, count } = badge;
+    const badgeLevels: any = BADGE_CRITERIA[type];
+
+    Object.keys(badgeLevels).forEach((badgeLevel: any) => {
+      if (count >= badgeLevels[badgeLevel]) {
+        badgeCounts[badgeLevel as keyof BadgeCounts] += 1;
+      }
+    });
+  });
+
+  return badgeCounts;
 };

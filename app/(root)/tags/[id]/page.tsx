@@ -1,15 +1,20 @@
+import Pagination from "@/components/Pagination";
 import NoResult from "@/components/shared/NoResult";
 import QuestionCard from "@/components/shared/cards/QuestionCard";
-
 import LocalSearchBar from "@/components/shared/search/LocalSearchBar";
 import { getQuestionsByTagName } from "@/lib/actions/tag.action";
 import { URLProps } from "@/types";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Tag | DevFlow",
+};
 
 const Page = async ({ params, searchParams }: URLProps) => {
   const result = await getQuestionsByTagName({
     tagId: params.id,
-    page: 1,
     searchQuery: searchParams.q,
+    page: searchParams.page ? +searchParams.page : 1,
   });
 
   return (
@@ -20,7 +25,7 @@ const Page = async ({ params, searchParams }: URLProps) => {
 
       <div className="mt-11 w-full">
         <LocalSearchBar
-          route="/"
+          route={`/tags/${params.id}`}
           iconPosition="left"
           imgSrc="/assets/icons/search.svg"
           placeHolder="Search tag Questions"
@@ -51,6 +56,13 @@ const Page = async ({ params, searchParams }: URLProps) => {
             linkTitle="Explore Questions"
           />
         )}
+      </div>
+
+      <div className="mt-10">
+        <Pagination
+          pageNumber={searchParams?.page ? +searchParams.page : 1}
+          isNext={result.isNext}
+        />
       </div>
     </>
   );

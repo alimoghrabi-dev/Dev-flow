@@ -18,6 +18,7 @@ import { Button } from "../ui/button";
 import Image from "next/image";
 import { createAnswerAction } from "@/lib/actions/answer.action";
 import { usePathname } from "next/navigation";
+import { toast } from "../ui/use-toast";
 
 interface Props {
   question: string;
@@ -29,6 +30,7 @@ const AnswerComponent = ({ question, questionId, authorId }: Props) => {
   const pathname = usePathname();
   const { mode } = useTheme();
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isSubmittingAI, setIsSubmittingAI] = useState<boolean>(false);
   const editorRef = useRef(null);
   const form = useForm<z.infer<typeof AnswerSchema>>({
     resolver: zodResolver(AnswerSchema),
@@ -55,11 +57,52 @@ const AnswerComponent = ({ question, questionId, authorId }: Props) => {
 
         editor.setContent("");
       }
+
+      return toast({
+        title: "Question is Answered successfully",
+        variant: "default",
+      });
     } catch (error) {
       console.log(error);
       throw error;
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const generateAIAnswer = async () => {
+    if (!authorId) return;
+
+    setIsSubmittingAI(true);
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/chatgbt`,
+        {
+          method: "POST",
+          body: JSON.stringify({ question }),
+        }
+      );
+
+      const aiAnswer = await response.json();
+      console.log(aiAnswer.reply);
+
+      // Generate AI Answer: it will not work cause i am not subscribed to openai but it work if subscribed:
+
+      /*  const formatedAnswer = aiAnswer.reply;
+
+      if (editorRef.current) {
+        const editor = editorRef.current as any;
+        editor.setContent(formatedAnswer);
+      }
+      */
+
+      // Toast
+    } catch (error) {
+      console.log(error);
+      throw error;
+    } finally {
+      setIsSubmittingAI(false);
     }
   };
 
@@ -69,19 +112,26 @@ const AnswerComponent = ({ question, questionId, authorId }: Props) => {
         <h4 className="paragraph-semibold text-dark400_light800">
           Write your Answer here.
         </h4>
-
-        <Button
-          onClick={() => {}}
-          className="btn light-border-2 gap-2 rounded-md px-4 py-2.5 text-primary-500 shadow-none dark:text-primary-500">
-          <Image
-            src="/assets/icons/stars.svg"
-            alt="star"
-            width={12}
-            height={12}
-            className="object-contain"
-          />
-          Generate an AI Answer
-        </Button>
+        {isSubmittingAI ? (
+          <p className="paragraph-regular light-border-2 rounded-md border px-4 py-2.5 text-center text-primary-500 shadow-none dark:text-primary-500">
+            Generating...
+          </p>
+        ) : (
+          <>
+            <Button
+              onClick={generateAIAnswer}
+              className="btn light-border-2 gap-2 rounded-md border px-4 py-2.5 text-primary-500 shadow-none dark:text-primary-500">
+              <Image
+                src="/assets/icons/stars.svg"
+                alt="star"
+                width={12}
+                height={12}
+                className="object-contain"
+              />
+              Generate an AI Answer
+            </Button>
+          </>
+        )}
       </div>
       <Form {...form}>
         <form

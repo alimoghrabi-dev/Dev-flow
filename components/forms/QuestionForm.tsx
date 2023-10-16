@@ -22,6 +22,7 @@ import Image from "next/image";
 import { createQuestion, editQuestion } from "@/lib/actions/question.action";
 import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "@/context/theme-provider";
+import { toast } from "../ui/use-toast";
 
 type Props = {
   type?: string;
@@ -96,6 +97,10 @@ const QuestionForm = ({ type, mongoUserId, questionDetails }: Props) => {
         });
 
         router.push(`/question/${parsedQuesitonDetails._id}`);
+        return toast({
+          title: "Question Edited",
+          variant: "default",
+        });
       } else {
         await createQuestion({
           title: values.title,
@@ -107,6 +112,10 @@ const QuestionForm = ({ type, mongoUserId, questionDetails }: Props) => {
         // navigate to home page:
 
         router.push("/");
+        return toast({
+          title: "Question Created",
+          variant: "default",
+        });
       }
     } catch (error) {
     } finally {

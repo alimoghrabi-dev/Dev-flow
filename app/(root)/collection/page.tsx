@@ -1,18 +1,27 @@
+import Pagination from "@/components/Pagination";
 import Filter from "@/components/shared/Filter";
 import NoResult from "@/components/shared/NoResult";
 import QuestionCard from "@/components/shared/cards/QuestionCard";
 import LocalSearchBar from "@/components/shared/search/LocalSearchBar";
 import { QuestionFilters } from "@/constants/filters";
-import { IQuestion } from "@/database/question.model";
 import { fetchSavedQuestions } from "@/lib/actions/user.action";
+import { SearchParamsProps } from "@/types";
 import { auth } from "@clerk/nextjs";
+import { Metadata } from "next";
 
-export default async function Page() {
+export const metadata: Metadata = {
+  title: "Collection | DevFlow",
+};
+
+export default async function Page({ searchParams }: SearchParamsProps) {
   const { userId } = auth();
   if (!userId) return null;
 
   const result = await fetchSavedQuestions({
     clerkId: userId,
+    searchQuery: searchParams.q,
+    filter: searchParams.filter,
+    page: searchParams.page ? +searchParams.page : 1,
   });
 
   return (
@@ -21,7 +30,7 @@ export default async function Page() {
 
       <div className="mt-11 flex justify-between gap-5 max-sm:flex-col sm:items-center">
         <LocalSearchBar
-          route="/"
+          route="/collection"
           iconPosition="left"
           imgSrc="/assets/icons/search.svg"
           placeHolder="Search for Questions"
@@ -57,6 +66,13 @@ export default async function Page() {
             linkTitle="Explore Questions"
           />
         )}
+      </div>
+
+      <div className="mt-10">
+        <Pagination
+          pageNumber={searchParams?.page ? +searchParams.page : 1}
+          isNext={result.isNext}
+        />
       </div>
     </>
   );

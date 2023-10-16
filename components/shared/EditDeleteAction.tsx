@@ -4,6 +4,7 @@ import { deleteAnswer } from "@/lib/actions/answer.action";
 import { deleteQuestion } from "@/lib/actions/question.action";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
+import { toast } from "../ui/use-toast";
 
 interface Props {
   type: string;
@@ -29,6 +30,11 @@ const EditDeleteAction = ({ type, itemId }: Props) => {
         content: "",
         tags: [],
       });
+
+      return toast({
+        title: "Question deleted successfully",
+        variant: "destructive",
+      });
     } else if (type === "Answer") {
       // delete answer:
 
@@ -40,6 +46,11 @@ const EditDeleteAction = ({ type, itemId }: Props) => {
         tags: [],
       });
     }
+
+    return toast({
+      title: "Answer deleted successfully",
+      variant: "destructive",
+    });
   };
 
   return (

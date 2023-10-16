@@ -18,6 +18,7 @@ import { Textarea } from "../ui/textarea";
 import { profileSchema } from "@/lib/validations";
 import { usePathname, useRouter } from "next/navigation";
 import { updateUser } from "@/lib/actions/user.action";
+import { toast } from "../ui/use-toast";
 
 interface Params {
   clerkId: string;
@@ -61,6 +62,10 @@ const Profile = ({ clerkId, user }: Params) => {
       });
 
       router.back();
+      return toast({
+        title: "Profile updated successfully",
+        variant: "default",
+      });
     } catch (error) {
       console.log(error);
       throw error;

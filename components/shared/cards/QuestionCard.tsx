@@ -17,6 +17,7 @@ interface QuestionCardProps {
     _id: string;
     name: string;
     picture: string;
+    clerkId: string;
   };
   upvotes: string[];
   views: number;

@@ -4,9 +4,20 @@ import Filter from "@/components/shared/Filter";
 import { getAllUsers } from "@/lib/actions/user.action";
 import Link from "next/link";
 import UserCard from "@/components/shared/cards/UserCard";
+import { SearchParamsProps } from "@/types";
+import Pagination from "@/components/Pagination";
+import { Metadata } from "next";
 
-const Page = async () => {
-  const result = await getAllUsers({});
+export const metadata: Metadata = {
+  title: "Community | DevFlow",
+};
+
+const Page = async ({ searchParams }: SearchParamsProps) => {
+  const result = await getAllUsers({
+    searchQuery: searchParams.q,
+    filter: searchParams.filter,
+    page: searchParams.page ? +searchParams.page : 1,
+  });
 
   return (
     <>
@@ -26,7 +37,7 @@ const Page = async () => {
         />
       </div>
 
-      <section className="mt-12 flex flex-wrap gap-4">
+      <section className="mt-12 flex flex-wrap justify-center gap-4">
         {result.users.length > 0 ? (
           result.users.map((user) => <UserCard key={user._id} user={user} />)
         ) : (
@@ -38,6 +49,12 @@ const Page = async () => {
           </div>
         )}
       </section>
+      <div className="mt-10">
+        <Pagination
+          pageNumber={searchParams?.page ? +searchParams.page : 1}
+          isNext={result.isNext}
+        />
+      </div>
     </>
   );
 };

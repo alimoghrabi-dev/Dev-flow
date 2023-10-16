@@ -12,6 +12,7 @@ import { formatLargeNumber } from "@/lib/utils";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { toast } from "../ui/use-toast";
 
 interface Props {
   type: string;
@@ -43,11 +44,21 @@ const Votes = ({
       questionId: JSON.parse(itemId),
       path: pathname,
     });
+
+    return toast({
+      title: `Question ${
+        !hasSaved ? "Saved to" : "Removed from"
+      } your collection`,
+      variant: hasSaved ? "destructive" : "default",
+    });
   };
 
   const handleVote = async (action: string) => {
     if (!userId) {
-      return;
+      return toast({
+        title: "You must be signed in to vote",
+        description: "Please sign in to vote",
+      });
     }
 
     if (action === "upvote") {
@@ -70,8 +81,10 @@ const Votes = ({
       }
 
       // TODO: show a toast
-
-      return;
+      return toast({
+        title: `Upvote ${!hasUpvoted ? "Successful" : "Removed"}`,
+        variant: !hasUpvoted ? "default" : "destructive",
+      });
     }
 
     if (action === "downvote") {
@@ -94,6 +107,10 @@ const Votes = ({
       }
 
       // TODO: show a toast
+      return toast({
+        title: `Downvote ${!hasDownvoted ? "Successful" : "Removed"}`,
+        variant: !hasDownvoted ? "default" : "destructive",
+      });
     }
   };
 

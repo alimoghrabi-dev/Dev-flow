@@ -8,8 +8,13 @@ import { getUserInfo } from "@/lib/actions/user.action";
 import { getJoinedDate } from "@/lib/utils";
 import { URLProps } from "@/types";
 import { SignedIn, auth } from "@clerk/nextjs";
+import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Profile | DevFlow",
+};
 
 const Page = async ({ params, searchParams }: URLProps) => {
   const { userId: clerkId } = auth();
@@ -78,8 +83,10 @@ const Page = async ({ params, searchParams }: URLProps) => {
       </div>
 
       <Stats
+        reputation={userInfo.user.reputation}
         totalQuestions={userInfo.totalQuestions}
         totalAnswers={userInfo.totalAnswers}
+        badges={userInfo.badgeCount}
       />
 
       <div className="mt-10 flex gap-10">
