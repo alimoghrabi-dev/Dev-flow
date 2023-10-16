@@ -39,7 +39,7 @@ const UserCard = async ({ user }: Props) => {
           </p>
         </div>
 
-        <div className="paragraph-medium mt-5">
+        <div className="paragraph-medium text-dark100_light900 mt-5">
           Stats ^
           <span className="paragraph-semibold ml-1 font-spaceGrotesk text-primary-500">
             {userInfo.user.reputation}
