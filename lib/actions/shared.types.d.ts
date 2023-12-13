@@ -22,3 +22,8 @@ export interface getAllUsersProps {
   filter?: string;
   searchQuery?: string;
 }
+
+export interface JobFilterParams {
+  query: string;
+  page: string;
+}
